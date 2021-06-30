@@ -1,7 +1,11 @@
 scoreboardHTML = document.getElementById("scoreboard");
 bangHTML = document.getElementById("bang");
+rules = document.getElementById("rules");
 losers = [];
 bangTime = 0;
+startGameKey = '0'
+
+rules.innerHTML = 'Press ' + startGameKey + " to begin the showdown"
 
 function clean() {
   losers = [];
@@ -54,7 +58,7 @@ function waitForWinnerEvadingLosers() {
         return;
       }
       showScoreboard(e.key);
-      pressSpaceToStartGame();
+      pressKeyToStartGame();
     },
     { once: true }
   );
@@ -71,11 +75,11 @@ function showdown(startsIn, timeRange) {
   setTimeout(waitForWinner, timeToWait);
 }
 
-function pressSpaceToStartGame() {
+function pressKeyToStartGame() {
   document.addEventListener(
     "keydown",
     (e) => {
-      if (e.key == " ") {
+      if (e.key == startGameKey) {
         clean();
         showdown(3, 4);
       }
@@ -84,4 +88,4 @@ function pressSpaceToStartGame() {
   );
 }
 
-pressSpaceToStartGame();
+pressKeyToStartGame();

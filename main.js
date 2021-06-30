@@ -1,6 +1,7 @@
 scoreboardHTML = document.getElementById("scoreboard");
 bangHTML = document.getElementById("bang");
 losers = [];
+bangTime = 0;
 
 function clean() {
   losers = [];
@@ -10,14 +11,30 @@ function clean() {
 
 function showScoreboard(winner) {
   let scoreboardText = losers
-    .map((loser) => loser + " shoot before the BANG<br>")
+    .map(
+      (loser) =>
+        loser.key +
+        " shoot " +
+        (loser.delta / 1000).toFixed(3) +
+        " seconds before the BANG<br>"
+    )
     .join("");
-  scoreboardText += winner + " wins<br>";
+
+  winnerDelaySeconds = (nowTime() - bangTime) / 1000;
+  scoreboardText +=
+    "<br>" +
+    winner +
+    " wins by shooting " +
+    winnerDelaySeconds.toFixed(3) +
+    " after BANG<br>Good reflexes kiddo";
   scoreboardHTML.innerHTML = scoreboardText;
 }
 
+nowTime = () => new Date().getTime();
+
 function handleLosers(e) {
-  losers.push(e.key);
+  let delta = bangTime - nowTime();
+  losers.push({ key: e.key, delta: delta });
 }
 
 function waitForWinner() {
@@ -32,7 +49,7 @@ function waitForWinnerEvadingLosers() {
     "keydown",
     (e) => {
       if (losers.includes(e.key)) {
-        console.log(e.key + ', no da bro ya perdiste')
+        console.log(e.key + ", no da bro ya perdiste");
         waitForWinnerEvadingLosers();
         return;
       }
@@ -47,8 +64,9 @@ function showdown(startsIn, timeRange) {
   // Convert to miliseconds
   startsIn *= 1000;
   timeRange *= 1000;
-
   timeToWait = startsIn + Math.random() * timeRange;
+
+  bangTime = nowTime() + timeToWait;
   document.addEventListener("keydown", handleLosers);
   setTimeout(waitForWinner, timeToWait);
 }

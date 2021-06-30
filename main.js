@@ -3,9 +3,9 @@ bangHTML = document.getElementById("bang");
 rules = document.getElementById("rules");
 losers = [];
 bangTime = 0;
-startGameKey = '0'
+startGameKey = " ";
 
-rules.innerHTML = 'Press ' + startGameKey + " to begin the showdown"
+rules.innerHTML = "Press " + "spacebar" + " to begin the showdown";
 
 function clean() {
   losers = [];
@@ -52,7 +52,7 @@ function waitForWinnerEvadingLosers() {
   document.addEventListener(
     "keydown",
     (e) => {
-      if (losers.includes(e.key)) {
+      if (losers.map((loser) => loser.key).includes(e.key)) {
         console.log(e.key + ", no da bro ya perdiste");
         waitForWinnerEvadingLosers();
         return;
@@ -79,10 +79,12 @@ function pressKeyToStartGame() {
   document.addEventListener(
     "keydown",
     (e) => {
-      if (e.key == startGameKey) {
-        clean();
-        showdown(3, 4);
+      if (e.key != startGameKey) {
+        pressKeyToStartGame();
+        return;
       }
+      clean();
+      showdown(3, 4);
     },
     { once: true }
   );

@@ -2,6 +2,7 @@ scoreboardHTML = document.getElementById("scoreboard");
 bangHTML = document.getElementById("bang");
 rules = document.getElementById("rules");
 losers = [];
+timeToWait = 0
 bangTime = 0;
 startGameKey = " ";
 
@@ -30,7 +31,7 @@ function showScoreboard(winner) {
     winner +
     " wins by shooting " +
     winnerDelaySeconds.toFixed(3) +
-    " after BANG<br>Good reflexes kiddo";
+    " after BANG<br>Good reflexes kiddo<br>The waiting time was " + (timeToWait/1000).toFixed(3) + " seconds";
   scoreboardHTML.innerHTML = scoreboardText;
 }
 
@@ -64,11 +65,13 @@ function waitForWinnerEvadingLosers() {
   );
 }
 
-function showdown(startsIn, timeRange) {
+function randomBetween(lowBound, highBound) {
+  return Math.random() * (highBound - lowBound) + lowBound;
+}
+
+function showdown(fromTime, toTime) {
   // Convert to miliseconds
-  startsIn *= 1000;
-  timeRange *= 1000;
-  timeToWait = startsIn + Math.random() * timeRange;
+  timeToWait = randomBetween(fromTime, toTime) * 1000;
 
   bangTime = nowTime() + timeToWait;
   document.addEventListener("keydown", handleLosers);

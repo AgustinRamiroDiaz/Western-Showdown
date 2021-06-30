@@ -18,18 +18,18 @@ function showScoreboard(winner) {
   let scoreboardText = losers
     .map(
       (loser) =>
-        loser.key +
+        loser.key.fontcolor("red") +
         " shoot " +
         (loser.delta / 1000).toFixed(3) +
-        " seconds before the BANG<br>"
+        " seconds before the BANG and lost!<br>"
     )
     .join("");
 
   winnerDelaySeconds = (nowTime() - bangTime) / 1000;
   scoreboardText +=
     "<br>" +
-    winner +
-    " wins by shooting " +
+    winner.fontcolor("green") +
+    " is the last one standing by shooting " +
     winnerDelaySeconds.toFixed(3) +
     " after BANG<br>Good reflexes kiddo<br>The waiting time was " + (timeToWait/1000).toFixed(3) + " seconds";
   scoreboardHTML.innerHTML = scoreboardText;
@@ -38,6 +38,7 @@ function showScoreboard(winner) {
 nowTime = () => new Date().getTime();
 
 function handleLosers(e) {
+  if (losers.map((loser) => loser.key).includes(e.key)) return
   let delta = bangTime - nowTime();
   losers.push({ key: e.key, delta: delta });
 }

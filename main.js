@@ -1,3 +1,12 @@
+// Auxiliary functions
+nowTime = () => new Date().getTime();
+
+function randomBetween(lowBound, highBound) {
+  return Math.random() * (highBound - lowBound) + lowBound;
+}
+
+// Global variables
+var bangAudioPlayer = document.getElementById("bangAudioPlayer");
 scoreboardHTML = document.getElementById("scoreboard");
 bangHTML = document.getElementById("bang");
 rules = document.getElementById("rules");
@@ -6,9 +15,11 @@ latePlayers = [];
 timeToWait = 0;
 bangTime = 0;
 startGameKey = " ";
-winner = "";
+winner = {};
 
 rules.innerHTML = "Press " + "spacebar" + " to begin the showdown";
+
+// Functions
 
 function clean() {
   earlyPlayers = [];
@@ -28,48 +39,43 @@ function showScoreboard() {
     )
     .join("");
 
-  winnerDelaySeconds = (nowTime() - bangTime) / 1000;
   scoreboardText +=
     "<br>" +
-    winner.fontcolor("green") +
+    winner.key.fontcolor("green") +
     " is the last one standing by shooting " +
-    winnerDelaySeconds.toFixed(3) +
+    (winner.delta / 1000).toFixed(3) +
     " after BANG<br>Good reflexes kiddo<br>The waiting time was " +
     (timeToWait / 1000).toFixed(3) +
     " seconds<br>";
 
   scoreboardText += latePlayers
-    .map(
-      (latePlayer) =>
-        `${latePlayer.key.fontcolor("red")} is late by ${(
-          latePlayer.delta / 1000
-        ).toFixed(3)}<br>`
-    )
+    .map((latePlayer) => `${latePlayer.key.fontcolor("red")} is late by ${(latePlayer.delta / 1000).toFixed(3)}<br>`)
     .join("");
   scoreboardHTML.innerHTML = scoreboardText;
 }
 
-nowTime = () => new Date().getTime();
+function showdown(fromTime, toTime) {
+  // Convert to miliseconds
+  timeToWait = randomBetween(fromTime, toTime) * 1000;
 
-function catchEarlyPlayers(e) {
-  if (earlyPlayers.map((earlyPlayer) => earlyPlayer.key).includes(e.key))
-    return;
-  let delta = bangTime - nowTime();
-  earlyPlayers.push({ key: e.key, delta: delta });
+  bangTime = nowTime() + timeToWait;
+  document.addEventListener("keydown", catchEarlyPlayers);
+  setTimeout(waitForWinner, timeToWait);
 }
 
 function waitForWinner() {
   bangHTML.innerHTML = "BANG";
-  document.removeEventListener("keydown", catchEarlyPlayers);
+  bangAudioPlayer.play()
 
+  document.removeEventListener("keydown", catchEarlyPlayers);
   waitForWinnerEvadingLosers();
 }
 
+// It also updates the scoreboard
 function catchLatePlayers(e) {
   console.log("I catched " + e.key + " too late");
-  // TODO: restrict also earlyPlayers
-  let earlyPlayerKeys = earlyPlayers.map((earlyPlayer) => earlyPlayer.key)
-  let latePlayerKeys = latePlayers.map((latePlayer) => latePlayer.key)
+  let earlyPlayerKeys = earlyPlayers.map((earlyPlayer) => earlyPlayer.key);
+  let latePlayerKeys = latePlayers.map((latePlayer) => latePlayer.key);
 
   if (earlyPlayerKeys.concat(latePlayerKeys).includes(e.key)) return;
   let delta = nowTime() - bangTime;
@@ -86,7 +92,8 @@ function waitForWinnerEvadingLosers() {
         waitForWinnerEvadingLosers();
         return;
       }
-      winner = e.key;
+      winner.key = e.key;
+      winner.delta = nowTime() - bangTime
       showScoreboard();
 
       document.addEventListener("keydown", catchLatePlayers);
@@ -100,17 +107,10 @@ function waitForWinnerEvadingLosers() {
   );
 }
 
-function randomBetween(lowBound, highBound) {
-  return Math.random() * (highBound - lowBound) + lowBound;
-}
-
-function showdown(fromTime, toTime) {
-  // Convert to miliseconds
-  timeToWait = randomBetween(fromTime, toTime) * 1000;
-
-  bangTime = nowTime() + timeToWait;
-  document.addEventListener("keydown", catchEarlyPlayers);
-  setTimeout(waitForWinner, timeToWait);
+function catchEarlyPlayers(e) {
+  if (earlyPlayers.map((earlyPlayer) => earlyPlayer.key).includes(e.key)) return;
+  let delta = bangTime - nowTime();
+  earlyPlayers.push({ key: e.key, delta: delta });
 }
 
 function pressKeyToStartGame() {
@@ -122,7 +122,7 @@ function pressKeyToStartGame() {
         return;
       }
       clean();
-      showdown(3, 4);
+      showdown(3, 7);
     },
     { once: true }
   );

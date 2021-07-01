@@ -23,6 +23,7 @@ rules.innerHTML = "Press " + "spacebar" + " to begin the showdown";
 
 function clean() {
   earlyPlayers = [];
+  latePlayers = [];
   scoreboardHTML.innerHTML = "";
   bangHTML.innerHTML = "";
   rules.innerHTML = "";

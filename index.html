@@ -14,10 +14,13 @@
   <body>
     <h1>It's Showdown</h1>
     <h4 id="rules"></h4>
-    <h1 id="bang"></h1>
-    <h1 id="scoreboard"></h1>
     <table id="scoreboard table"></table>
-    <div id="ShowDown">{{ message }}</div>
+    <div id="ShowDown">
+      <h1>{{ scoreboardHTML }}</h1>
+      <h1>{{ bangHTML }}</h1>
+
+      <li v-for="loser in losers">{{ loser.key }}</li>
+    </div>
 
     <script src="main.js"></script>
   </body>

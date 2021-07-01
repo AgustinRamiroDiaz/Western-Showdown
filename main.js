@@ -43,7 +43,7 @@ function showScoreboard() {
       (latePlayer) =>
         `${latePlayer.key.fontcolor("red")} is late by ${(
           latePlayer.delta / 1000
-        ).toFixed(3)}`
+        ).toFixed(3)}<br>`
     )
     .join("");
   scoreboardHTML.innerHTML = scoreboardText;
@@ -51,7 +51,7 @@ function showScoreboard() {
 
 nowTime = () => new Date().getTime();
 
-function handleLosers(e) {
+function catchEarlyPlayers(e) {
   if (earlyPlayers.map((earlyPlayer) => earlyPlayer.key).includes(e.key))
     return;
   let delta = bangTime - nowTime();
@@ -60,7 +60,7 @@ function handleLosers(e) {
 
 function waitForWinner() {
   bangHTML.innerHTML = "BANG";
-  document.removeEventListener("keydown", handleLosers);
+  document.removeEventListener("keydown", catchEarlyPlayers);
 
   waitForWinnerEvadingLosers();
 }
@@ -68,7 +68,10 @@ function waitForWinner() {
 function catchLatePlayers(e) {
   console.log("I catched " + e.key + " too late");
   // TODO: restrict also earlyPlayers
-  if (latePlayers.map((latePlayer) => latePlayer.key).includes(e.key)) return;
+  let earlyPlayerKeys = earlyPlayers.map((earlyPlayer) => earlyPlayer.key)
+  let latePlayerKeys = latePlayers.map((latePlayer) => latePlayer.key)
+
+  if (earlyPlayerKeys.concat(latePlayerKeys).includes(e.key)) return;
   let delta = nowTime() - bangTime;
   latePlayers.push({ key: e.key, delta: delta });
   showScoreboard();
@@ -106,7 +109,7 @@ function showdown(fromTime, toTime) {
   timeToWait = randomBetween(fromTime, toTime) * 1000;
 
   bangTime = nowTime() + timeToWait;
-  document.addEventListener("keydown", handleLosers);
+  document.addEventListener("keydown", catchEarlyPlayers);
   setTimeout(waitForWinner, timeToWait);
 }
 

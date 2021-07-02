@@ -10,7 +10,6 @@ var bangAudioPlayer = document.getElementById("bangAudioPlayer");
 var gunImage = document.getElementById("gun image")
 
 var scoreboardHTML = document.getElementById("scoreboard");
-var bangHTML = document.getElementById("bang");
 var rules = document.getElementById("rules");
 var earlyPlayers = [];
 var latePlayers = [];
@@ -27,7 +26,6 @@ function clean() {
   earlyPlayers = [];
   latePlayers = [];
   scoreboardHTML.innerHTML = "";
-  bangHTML.innerHTML = "";
   rules.innerHTML = "";
   gunImage.src = "images/westernBlackNoBang.png"
 }
@@ -77,7 +75,6 @@ function waitForWinner() {
 }
 
 function BANG() {
-  bangHTML.innerHTML = "BANG";
   bangAudioPlayer.play()
   gunImage.src = "images/westernBlackBang.png"
 }

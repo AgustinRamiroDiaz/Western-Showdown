@@ -62,13 +62,14 @@ function showdown(fromTime, toTime) {
 
   bangTime = nowTime() + timeToWait;
   document.addEventListener("keydown", catchEarlyPlayers);
+  setTimeout(() => {document.removeEventListener("keydown", catchEarlyPlayers)}, timeToWait);
+
   setTimeout(waitForWinner, timeToWait);
 }
 
 function waitForWinner() {
   BANG()
   
-  document.removeEventListener("keydown", catchEarlyPlayers);
   waitForWinnerEvadingLosers();
 }
 

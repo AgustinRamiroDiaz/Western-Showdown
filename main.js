@@ -35,23 +35,21 @@ function showScoreboard() {
     .map(
       (earlyPlayer) =>
         earlyPlayer.key.fontcolor("red") +
-        " shoot " +
+        " shoot before the BANG (-" +
         (earlyPlayer.delta / 1000).toFixed(3) +
-        " seconds before the BANG and lost!<br>"
+        ")<br>"
     )
     .join("");
 
   scoreboardText +=
     "<br>" +
     winner.key.fontcolor("green") +
-    " is the last one standing by shooting " +
+    " is the last one standing (+" +
     (winner.delta / 1000).toFixed(3) +
-    " after BANG<br>Good reflexes kiddo<br>The waiting time was " +
-    (timeToWait / 1000).toFixed(3) +
-    " seconds<br>";
+    ")<br>";
 
   scoreboardText += latePlayers
-    .map((latePlayer) => `${latePlayer.key.fontcolor("red")} is late by ${(latePlayer.delta / 1000).toFixed(3)}<br>`)
+    .map((latePlayer) => `${latePlayer.key.fontcolor("red")} is late (+ ${(latePlayer.delta / 1000).toFixed(3)})<br>`)
     .join("");
   scoreboardHTML.innerHTML = scoreboardText;
 

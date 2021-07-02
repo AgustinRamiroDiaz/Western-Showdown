@@ -7,15 +7,17 @@ function randomBetween(lowBound, highBound) {
 
 // Global variables
 var bangAudioPlayer = document.getElementById("bangAudioPlayer");
-scoreboardHTML = document.getElementById("scoreboard");
-bangHTML = document.getElementById("bang");
-rules = document.getElementById("rules");
-earlyPlayers = [];
-latePlayers = [];
-timeToWait = 0;
-bangTime = 0;
-startGameKey = " ";
-winner = {};
+var gunImage = document.getElementById("gun image")
+
+var scoreboardHTML = document.getElementById("scoreboard");
+var bangHTML = document.getElementById("bang");
+var rules = document.getElementById("rules");
+var earlyPlayers = [];
+var latePlayers = [];
+var timeToWait = 0;
+var bangTime = 0;
+var startGameKey = " ";
+var winner = {};
 
 rules.innerHTML = "Press " + "spacebar" + " to begin the showdown";
 
@@ -27,6 +29,7 @@ function clean() {
   scoreboardHTML.innerHTML = "";
   bangHTML.innerHTML = "";
   rules.innerHTML = "";
+  gunImage.src = "images/westernBlackNoBang.png"
 }
 
 function showScoreboard() {
@@ -65,11 +68,16 @@ function showdown(fromTime, toTime) {
 }
 
 function waitForWinner() {
-  bangHTML.innerHTML = "BANG";
-  bangAudioPlayer.play()
-
+  BANG()
+  
   document.removeEventListener("keydown", catchEarlyPlayers);
   waitForWinnerEvadingLosers();
+}
+
+function BANG() {
+  bangHTML.innerHTML = "BANG";
+  bangAudioPlayer.play()
+  gunImage.src = "images/westernBlackBang.png"
 }
 
 // It also updates the scoreboard

@@ -56,6 +56,8 @@ function showScoreboard() {
     .map((latePlayer) => `${latePlayer.key.fontcolor("red")} is late by ${(latePlayer.delta / 1000).toFixed(3)}<br>`)
     .join("");
   scoreboardHTML.innerHTML = scoreboardText;
+
+  scoreboardHTML.scrollIntoView();
 }
 
 function showdown(fromTime, toTime) {

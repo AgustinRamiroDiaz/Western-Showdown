@@ -84,8 +84,11 @@ function catchLatePlayers(e) {
   console.log("I catched " + e.key + " too late");
   let earlyPlayerKeys = earlyPlayers.map((earlyPlayer) => earlyPlayer.key);
   let latePlayerKeys = latePlayers.map((latePlayer) => latePlayer.key);
+  let winnerKey = winner.key
 
-  if (earlyPlayerKeys.concat(latePlayerKeys).includes(e.key)) return;
+  let allPlayers = earlyPlayerKeys.concat(latePlayerKeys, winnerKey)
+
+  if (allPlayers.includes(e.key)) return;
   let delta = nowTime() - bangTime;
   latePlayers.push({ key: e.key, delta: delta });
   showScoreboard();

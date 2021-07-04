@@ -23,6 +23,7 @@ rules.innerHTML = "Press " + "spacebar" + " to begin the showdown";
 // Functions
 
 function clean() {
+  document.title = "A Western Showdown"
   earlyPlayers = [];
   latePlayers = [];
   scoreboardHTML.innerHTML = "";
@@ -35,9 +36,7 @@ function showScoreboard() {
     .map(
       (earlyPlayer) =>
         earlyPlayer.key.fontcolor("red") +
-        " shoot before the BANG (-" +
-        (earlyPlayer.delta / 1000).toFixed(3) +
-        ")<br>"
+        ` is in a hurry (-${(earlyPlayer.delta / 1000).toFixed(3)})<br>`
     )
     .join("");
 
@@ -46,10 +45,10 @@ function showScoreboard() {
     winner.key.fontcolor("green") +
     " is the last one standing (+" +
     (winner.delta / 1000).toFixed(3) +
-    ")<br>";
+    ")<br><br>";
 
   scoreboardText += latePlayers
-    .map((latePlayer) => `${latePlayer.key.fontcolor("red")} is late (+ ${(latePlayer.delta / 1000).toFixed(3)})<br>`)
+    .map((latePlayer) => `${latePlayer.key.fontcolor("red")} is too late (+${(latePlayer.delta / 1000).toFixed(3)})<br>`)
     .join("");
   scoreboardHTML.innerHTML = scoreboardText;
 
@@ -74,6 +73,7 @@ function waitForWinner() {
 }
 
 function BANG() {
+  document.title = "BANG!"
   bangAudioPlayer.play()
   gunImage.src = "images/westernBlackBang.png"
 }

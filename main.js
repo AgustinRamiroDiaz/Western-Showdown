@@ -139,3 +139,6 @@ function pressKeyToStartGame() {
 }
 
 pressKeyToStartGame();
+
+
+console.log("gugu+gali=<3")
